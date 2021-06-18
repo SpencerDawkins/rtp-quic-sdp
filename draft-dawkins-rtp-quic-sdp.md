@@ -1,14 +1,14 @@
 ---
-title: SDP Offer/Answer for RTP over QUIC
-abbrev: SDP O/A for RTP over QUIC
+title: RTP over QUIC using SDP Offer/Answer
+abbrev: RTP over QUIC SDP O/A
 docname: draft-dawkins-rtp-quic-sdp-latest
 date:
-category: info
+category: std
 
 ipr: trust200902
-area: transport
-workgroup: QUIC Working Group
-keyword: Internet-Draft
+area: applications
+workgroup: ACTCORE/MMUSIC Working Groups 
+keyword: Internet-Draft QUIC RTP SDP
 
 coding: us-ascii
 stand_alone: yes
@@ -25,8 +25,10 @@ author:
 normative:
 
   RFC2119:
+  RFC3261:
   RFC3264:
   RFC8174:
+  RFC8825:
   RFC8866:
   RFC9000:
   RFC9001:
@@ -34,19 +36,20 @@ normative:
 informative:
    
   I-D.ietf-avtcore-rtp-vvc:
+  I-D.hurst-quic-rtp-tunnelling:
   RFC4145:
   
 --- abstract
 
-This document describes two new SDP "proto" attribute values, "QUIC/RTP/AVPF", and describes how SDP Offer/Answer can be used to set up an RTP connection using QUIC as a transport protocol. 
+This document describes two new SDP "proto" attribute values, "QUIC" and "QUIC/RTP/AVPF", and describes how SDP Offer/Answer can be used to set up an RTP connection using QUIC as a transport protocol. 
 
 --- middle
 
 # Introduction {#intro}
 
-This document describes a new SDP "proto" attribute value, "QUIC/RTP/AVPF", and describes how SDP Offer/Answer can be used to set up an RTP connection using QUIC as a transport protocol. 
+This document describes two new SDP "proto" attribute values, "QUIC" and "QUIC/RTP/AVPF", and describes how SDP Offer/Answer can be used to set up an RTP connection using QUIC as a transport protocol. 
 
-This would be necessary for the use of QUIC as an underlying transport protocol for RTP, in addition to 
+These proto values are necessary to allow the use of QUIC as an underlying transport protocol for applications that commonly use SDP as a session signaling protocol to set up RTP connections with UDP as its underlying transport protocol, such as SIP ({{RFC3261}}) and WebRTC ({{RFC8825}}).
 
 ## Notes for Readers {#readernotes}
 
@@ -66,7 +69,7 @@ Readers are invited to open issues and send pull requests with contributed text 
 
 ##Background for this document {#background}
 
-In discussions in the QUIC working group and AVTCORE working group, various proposals for "RTP over QUIC" have been submitted, but these have not targeted the use of SDP Offer/Answer, as would be common for RTP applications in common use (for example, SIP).
+In discussions in the QUIC working group and AVTCORE working group, various proposals for "RTP over QUIC" have been submitted (e.g. {{I-D.hurst-quic-rtp-tunnelling}} and [I-D.rtpfolks-quic-rtp-over-quic] (need to fix this reference if possible)), but these have not targeted the use of SDP Offer/Answer, as would be common for RTP applications in common use (such as SIP ({{RFC3261}}) and WebRTC ({{RFC8825}})). This document is intended to help fill that gap. 
 
 #To-Do
 
