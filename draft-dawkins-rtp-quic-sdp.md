@@ -10,7 +10,6 @@ area: applications
 workgroup: ACTCORE/MMUSIC Working Groups 
 keyword: Internet-Draft QUIC RTP SDP
 
-coding: us-ascii
 stand_alone: yes
 pi: [toc, sortrefs, symrefs]
 
@@ -37,6 +36,7 @@ informative:
    
   I-D.ietf-avtcore-rtp-vvc:
   I-D.hurst-quic-rtp-tunnelling:
+  I-D.rtpfolks-quic-rtp-over-quic:
   RFC4145:
   
 --- abstract
@@ -69,7 +69,7 @@ Readers are invited to open issues and send pull requests with contributed text 
 
 ##Background for this document {#background}
 
-In discussions in the QUIC working group and AVTCORE working group, various proposals for "RTP over QUIC" have been submitted (e.g. {{I-D.hurst-quic-rtp-tunnelling}} and [I-D.rtpfolks-quic-rtp-over-quic] (need to fix this reference if possible)), but these have not targeted the use of SDP Offer/Answer, as would be common for RTP applications in common use (such as SIP ({{RFC3261}}) and WebRTC ({{RFC8825}})). This document is intended to help fill that gap. 
+In discussions in the QUIC working group and AVTCORE working group, various proposals for "RTP over QUIC" have been submitted (e.g. {{I-D.hurst-quic-rtp-tunnelling}} and {{I-D.rtpfolks-quic-rtp-over-quic}} (need to fix this reference if possible)), but these have not targeted the use of SDP Offer/Answer, as would be common for RTP applications in common use (such as SIP ({{RFC3261}}) and WebRTC ({{RFC8825}})). This document is intended to help fill that gap. 
 
 #To-Do
 
