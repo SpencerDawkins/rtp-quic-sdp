@@ -27,9 +27,9 @@ normative:
   RFC3261:
   RFC3264:
   RFC3551:
-  RFC3711:
   RFC4585:
   RFC5761:
+  RFC5124:
   RFC8174:
   RFC8825:
   RFC8843:
@@ -81,19 +81,19 @@ Readers are invited to open issues and send pull requests with contributed text 
 
 ##Scope of this document {#scope}
 
-Several proposals for "RTP over QUIC" have been submitted to the IETF as Internet-Drafts (e.g. {{I-D.rtpfolks-quic-rtp-over-quic}}), {{I-D.hurst-quic-rtp-tunnelling}}, and {{I-D.engelbart-rtp-over-quic}}, but these proposals have not targeted the use of SDP Offer/Answer, as would be common for current RTP applications in common use, such as SIP ({{RFC3261}}) and WebRTC ({{RFC8825}}).
+Several proposals for "RTP over QUIC" have been submitted to the IETF as Internet-Drafts (e.g. {{I-D.rtpfolks-quic-rtp-over-quic}}), {{I-D.hurst-quic-rtp-tunnelling}}, and {{I-D.engelbart-rtp-over-quic}}, but these proposals have not targeted description of the RTP sessions using SDP Offer/Answer, as would be the case for many current RTP applications in common use, such as SIP ({{RFC3261}}) and WebRTC ({{RFC8825}}).
 
 This document is intended to fill that gap.
 
 ##Assumptions for this document {#assume}
 
-This document assumes that for RTP-over-QUIC, it is useful to register these AVT profiles using QUIC, in order to allow existing RTP applicaions to migrate more easily to QUIC:
+This document assumes that for RTP-over-QUIC, it is useful to register these AVT profiles using QUIC, in order to allow existing SIP and RTCWEB RTP applications to migrate more easily to QUIC:
 
  * RTP/AVP ("RTP Profile for Audio and Video Conferences with Minimal Control"), as defined in {{RFC3551}}.
  * RTP/AVPF ("Extended RTP Profile for Real-time Transport Control Protocol (RTCP)-Based Feedback (RTP/AVPF)"), as defined in {{RFC4585}}.
- * RTP/SAVP ("The Secure Real-time Transport Protocol (SRTP)"), as defined in {{RFC3711}}.
+ * RTP/SAVPF ("Extended Secure RTP Profile for Real-time Transport Control Protocol (RTCP)-Based Feedback (RTP/SAVPF)"), as defined in {{RFC5124}}.
 
-Other profiles could be registered, if that's useful - feedback about anything that's missing would be helpful.
+This is a good topic for discussion - the RTP (and RTCP) headers and payloads will be entirely encrypted using QUIC {{RFC9000}}, as secured by TLS 1.3 handshake {{RFC9001}}. Is this an opportunity to make AVF and AV
 
 This document assumes that any implementation adding support for RTP-over-QUIC could reasonably add support for BUNDLE {{RFC8843}}, "rtcp-mux" {{RFC5761}}.
 
