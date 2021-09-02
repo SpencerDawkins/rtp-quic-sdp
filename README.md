@@ -1,4 +1,4 @@
-# Path selection for Multiple Paths In QUIC
+# SDP Offer/Answer for RTP using QUIC as Transport
 
 This repository is used for a draft defining SDP usage for RTP with QUIC as its underlying transport protocol. The draft is draft-dawkins-avtcore-rtp-quic-sdp.
 
