@@ -101,7 +101,7 @@ This document assumes that any implementation adding support for RTP-over-QUIC c
 
 #Open Questions (probably not for this draft, but could have implications on SDP Offer/Answer)
 
- * RTP (and RTCP) headers and payloads will be entirely encrypted using QUIC ({{RFC9000}}), as secured by TLS 1.3 handshake ({{RFC9001}}), between QUIC endpoints. It's worth thinking how that maps onto expected deployment scenarios like centralized multiparty conferencing, and also whether WebRTC really requires SAVPF with double encryption (i.e. SRTP encryption, and then QUIC encryption). No opinions here yet, just noting the question for now.
+ * RTP (and RTCP) headers and payloads will be entirely encrypted using QUIC ({{RFC9000}}), as secured by TLS 1.3 handshake ({{RFC9001}}), between QUIC endpoints. It's worth thinking more about how that maps onto expected deployment scenarios like centralized multiparty conferencing, and also whether WebRTC really requires SAVPF with double encryption (i.e. SRTP encryption, and then QUIC encryption). No opinions here yet, just noting the question for now.
 
  * When QUIC establishes connections, it uses IP addresses but then expects applications to use connection IDs to refer to connections, even if the underlying IP addresses change because of NAT binding, and even if the QUIC implementation performs QUIC connection migration itself, so the underlying IP addresses change. RTP applications expect to use IP addresses, not QUIC connection IDs. Must we specify an RTP/RTCP adaptation layer, similar to {{I-D.ietf-quic-http}} for HTTP/3?
 
@@ -205,7 +205,7 @@ This example is largely based on an example appearing in {{RFC8866}}, Section 5,
 
 Because QUIC uses connections for both streams and datagrams, we are reusing two session- and media-level SDP attributes from {{SDP-attribute-name}} that were defined in {{RFC4145}} for use with TCP: setup and connection.
 
-This example might be included in a SIP Invite.
+This example SDP offer might be included in a SIP Invite.
 
 # IANA Considerations
 
