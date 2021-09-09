@@ -50,7 +50,6 @@ informative:
 
   I-D.ietf-avtcore-rtp-vvc:
   I-D.engelbart-rtp-over-quic:
-  I-D.ietf-quic-http:
   RFC4145:
 
 --- abstract
@@ -69,6 +68,8 @@ These proto values are necessary to allow the use of QUIC as an underlying trans
 
 ## Notes for Readers {#readernotes}
 
+(Note to RFC Editor - if this document ever reaches you, please remove this section)
+
 This document is intended for publiication as a standards-track RFC in the IETF stream, but has not been adopted by any IETF working group, and does not carry any special status within the IETF.
 
 ## Terminology
@@ -80,6 +81,8 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 (Note to RFC Editor - if this document ever reaches you, please remove this section)
 
 This document is under development in the Github repository at https://github.com/SpencerDawkins/sdp-rtp-quic.
+
+Open issues are being tracked in the Github repository for this document. The direct link to the list of issues is https://github.com/SpencerDawkins/sdp-rtp-quic/issues.
 
 Readers are invited to open issues and send pull requests with contributed text for this document, or to send them to the author via email.
 
@@ -98,12 +101,6 @@ This document assumes that for RTP-over-QUIC, it is useful to register these AVP
  * RTP/SAVPF ("Extended Secure RTP Profile for Real-time Transport Control Protocol (RTCP)-Based Feedback (RTP/SAVPF)"), as defined in {{RFC5124}}.
 
 This document assumes that any implementation adding support for RTP-over-QUIC could reasonably add support for BUNDLE ({{RFC8843}}), "rtcp-mux" ({{RFC5761}}).
-
-#Open Questions (probably not for this draft, but could have implications on SDP Offer/Answer)
-
- * RTP (and RTCP) headers and payloads will be entirely encrypted using QUIC ({{RFC9000}}), as secured by TLS 1.3 handshake ({{RFC9001}}), between QUIC endpoints. It's worth thinking more about how that maps onto expected deployment scenarios like centralized multiparty conferencing, and also whether WebRTC really requires SAVPF with double encryption (i.e. SRTP encryption, and then QUIC encryption). No opinions here yet, just noting the question for now.
-
- * When QUIC establishes connections, it uses IP addresses but then expects applications to use connection IDs to refer to connections, even if the underlying IP addresses change because of NAT binding, and even if the QUIC implementation performs QUIC connection migration itself, so the underlying IP addresses change. RTP applications expect to use IP addresses, not QUIC connection IDs. Must we specify an RTP/RTCP adaptation layer, similar to {{I-D.ietf-quic-http}} for HTTP/3?
 
 #Identifiers and Attributes
 
@@ -244,4 +241,8 @@ Security considerations for SDP offer/answer are described in the cooresponding 
 
 My appreciation to the authors of {{RFC4145}}, which served as a model for the initial structure of this document.
 
-Your name could appear here. Please comment and contribute, as per {{contrib}}.
+Thanks to thse folks for helping to improve this draft:
+
+* Colin Perkins
+
+(Your name also could appear here. Please comment and contribute, as per {{contrib}}).
