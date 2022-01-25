@@ -1,13 +1,13 @@
 ---
 title: SDP Offer/Answer for RTP using QUIC as Transport
 abbrev: SDP O/A for RTP over QUIC
-docname: draft-dawkins-sdp-rtp-quic-latest
+docname: draft-dawkins-avtcore-sdp-rtp-quic-latest
 date:
 category: std
 
 ipr: trust200902
 area: applications
-workgroup: AVTCORE/MMUSIC Working Groups
+workgroup: AVTCORE Working Group
 keyword: Internet-Draft QUIC RTP SDP
 
 stand_alone: yes
@@ -32,6 +32,7 @@ normative:
   RFC5761:
   RFC5124:
   RFC8174:
+  RFC8298:
   RFC8825:
   RFC8843:
   RFC8866:
@@ -50,13 +51,14 @@ informative:
 
   I-D.ietf-avtcore-rtp-vvc:
   I-D.engelbart-rtp-over-quic:
+  I-D.huitema-quic-ts:
   RFC4145:
 
 --- abstract
 
 This document describes these new SDP "proto" attribute values: "QUIC", "QUIC/RTP/SAVP", "QUIC/RTP/AVPF", and "QUIC/RTP/SAVPF", and describes how SDP Offer/Answer can be used to set up an RTP connection using QUIC as a transport protocol.
 
-These proto values are necessary to allow the use of QUIC as an underlying transport protocol for applications that commonly use SDP as a session signaling protocol to set up RTP connections with UDP as its underlying transport protocol, such as SIP and WebRTC.
+These proto values are necessary to allow the use of QUIC as an underlying transport protocol for applications such as SIP and WebRTC that commonly use SDP as a session signaling protocol to set up RTP connections.
 
 --- middle
 
@@ -64,13 +66,13 @@ These proto values are necessary to allow the use of QUIC as an underlying trans
 
 This document describes these new SDP "proto" attribute values: "QUIC", "QUIC/RTP/SAVP", "QUIC/RTP/AVPF", and "QUIC/RTP/SAVPF", and describes how SDP Offer/Answer ({{RFC3264}}) can be used to set up an RTP ({{RFC3550}}) connection using QUIC ({{RFC9000}}) as a transport protocol.
 
-These proto values are necessary to allow the use of QUIC as an underlying transport protocol for applications that commonly use SDP as a session signaling protocol to set up RTP connections with UDP as its underlying transport protocol, such as SIP ({{RFC3261}}) and WebRTC ({{RFC8825}}).
+These proto values are necessary to allow the use of QUIC as an underlying transport protocol for applications such as SIP ({{RFC3261}}) and WebRTC ({{RFC8825}}) that commonly use SDP as a session signaling protocol to set up RTP connections.
 
 ## Notes for Readers {#readernotes}
 
 (Note to RFC Editor - if this document ever reaches you, please remove this section)
 
-This document is intended for publiication as a standards-track RFC in the IETF stream, but has not been adopted by any IETF working group, and does not carry any special status within the IETF.
+This document is intended for publication as a standards-track RFC in the IETF stream, but has not been adopted by any IETF working group, and does not carry any special status within the IETF.
 
 ## Terminology
 
@@ -80,17 +82,15 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 (Note to RFC Editor - if this document ever reaches you, please remove this section)
 
-This document is under development in the Github repository at https://github.com/SpencerDawkins/sdp-rtp-quic.
+This document is intended to be discussed in the AVTCORE working group, in the same venue as RTP over QUIC proposals are discussed. At some point in the future, this document will be sent to the MMUSIC working group for review by SDP experts, but SDP-specific comments are welcomed at any time.
 
-Open issues are being tracked in the Github repository for this document. The direct link to the list of issues is https://github.com/SpencerDawkins/sdp-rtp-quic/issues.
-
-Readers are invited to open issues and send pull requests with contributed text for this document, or to send them to the author via email.
+Readers are also invited to open issues and send pull requests with contributed text for this document in the GitHub repository at https://github.com/SpencerDawkins/sdp-rtp-quic. The direct link to the list of issues is https://github.com/SpencerDawkins/sdp-rtp-quic/issues.
 
 ##Scope of this document {#scope}
 
 This document focuses on the IANA registration and description of the RTP sessions using SDP Offer/Answer, as would be the case for many current RTP applications in common use, such as SIP ({{RFC3261}}) and WebRTC ({{RFC8825}}).
 
-This document is intended as complementary to {{I-D.engelbart-rtp-over-quic}}, which largely focuses on RTP/RTCP encapsulation in QUIC datagrams, so that the SDP experts can focus on SDP offer/answer aspects, and the RTP experts can focus on RTP/RTCP encapsulation aspects.
+This document is intended as complementary to drafts such as {{I-D.engelbart-rtp-over-quic}}, which largely focus on RTP/RTCP encapsulation in QUIC, so that the SDP experts can focus on SDP offer/answer aspects, and the RTP experts can focus on RTP/RTCP encapsulation aspects.
 
 ##Assumptions for this document {#assume}
 
@@ -100,9 +100,23 @@ This document assumes that for RTP-over-QUIC, it is useful to register these AVP
  * RTP/AVPF ("Extended RTP Profile for Real-time Transport Control Protocol (RTCP)-Based Feedback (RTP/AVPF)"), as defined in {{RFC4585}}.
  * RTP/SAVPF ("Extended Secure RTP Profile for Real-time Transport Control Protocol (RTCP)-Based Feedback (RTP/SAVPF)"), as defined in {{RFC5124}}.
 
-This document assumes that any implementation adding support for RTP-over-QUIC could reasonably add support for BUNDLE ({{RFC8843}}), "rtcp-mux" ({{RFC5761}}).
+This document assumes that any implementation adding support for RTP-over-QUIC could reasonably also add support for BUNDLE ({{RFC8843}}) and "rtcp-mux" ({{RFC5761}}), so these capabiilities are not mentioned further in this document.
 
-#Identifiers and Attributes
+## Open Questions {#open-questions}
+
+The current contents of {{idents-atts}} and {{iana}} would allow a relatively straightforward translation from "RTP over UDP" to "RTP over QUIC over UDP", and likewise from "RTCP over UDP" to "RTCP over QUIC over UDP".
+
+Although it is still early days for RTP over QUIC, things may not be that straightforward. Just limiting our attention to various proposals for "RTP over QUIC" that have already received attention in the IETF, we have seen
+
+* a desire to make use of QUIC connection migration in case of path failure between two endpoints
+* a desire to replace RTP Round Trip Time (RTT) measurement with something like a proposed QUIC extension for timestamps ({{I-D.huitema-quic-ts}}) that could be used to measure one-way delays
+* some way to make use of QUIC streams, whether with QUIC datagrams in the same QUIC connection or not
+* some way to decouple the RTP state machine and the QUIC state machine, which each assume they are responsible for managing sending rates, without any knowledge of what the other plans to do
+* defining a media-focused congestion control mechanism such as "Self-Clocked Rate Adaptation for Multimedia", or SCReAM ({{RFC8298}}), to be included in QUIC implementations
+
+For any of these proposals (or other proposals that may surface in the future), signaling in SDP may be required.
+
+#Identifiers and Attributes {#idents-atts}
 
 As much as possible, these are reused from other specifications, with references to the original definitions.
 
@@ -204,7 +218,7 @@ Because QUIC uses connections for both streams and datagrams, we are reusing two
 
 This example SDP offer might be included in a SIP Invite.
 
-# IANA Considerations
+# IANA Considerations {#iana}
 
 This document registers these protocols in the proto registry ({{SDP-parameters}}).
 
@@ -241,7 +255,7 @@ Security considerations for SDP offer/answer are described in the cooresponding 
 
 My appreciation to the authors of {{RFC4145}}, which served as a model for the initial structure of this document.
 
-Thanks to thse folks for helping to improve this draft:
+Thanks to these folks for helping to improve this draft:
 
 * Colin Perkins
 
