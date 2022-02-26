@@ -1,0 +1,150 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2021-11-09T00:59:42.064913+00:00",
+  "repo": "SpencerDawkins/sdp-rtp-quic",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [
+    {
+      "number": 1,
+      "id": "MDU6SXNzdWU5OTI3MDc4ODU=",
+      "title": "Does double encryption matter for (say) SAVPF?",
+      "url": "https://github.com/SpencerDawkins/sdp-rtp-quic/issues/1",
+      "state": "OPEN",
+      "author": "SpencerDawkins",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": " * RTP (and RTCP) headers and payloads will be entirely encrypted using QUIC ({{RFC9000}}), as secured by TLS 1.3 handshake ({{RFC9001}}), between QUIC endpoints. It's worth thinking more about how that maps onto expected deployment scenarios like centralized multiparty conferencing, and also whether WebRTC really requires SAVPF with double encryption (i.e. SRTP encryption, and then QUIC encryption). No opinions here yet, just noting the question for now.",
+      "createdAt": "2021-09-09T22:21:56Z",
+      "updatedAt": "2021-09-20T20:21:02Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "SpencerDawkins",
+          "authorAssociation": "OWNER",
+          "body": "From @rjb1000, Richard Bradbury, via private email: \r\n\r\n> **Is QUIC/RTP/SAVP the right profile name?** I wonder if SRTP (as specified in RFC 3711) is rendered obsolete by QUIC given that the latter satisfies the primary security goals of SRTP (confidentiality and integrity). Isn't the simple case really just QUIC/RTP/AVP?\r\n> That then begs the question: **What is the difference between QUIC/RTP/AVPF and QUIC/RTP/SAVPF,** given that security is built into the QUIC transport.",
+          "createdAt": "2021-09-20T19:55:41Z",
+          "updatedAt": "2021-09-20T19:55:41Z"
+        },
+        {
+          "author": "SpencerDawkins",
+          "authorAssociation": "OWNER",
+          "body": "ISTM that the answer to these questions depends a great deal on how much effort we expect people to go to, in order to run \"RTP over QUIC\", and that likely doesn't have a single answer. If a SIP implementation is using RTP/SAVPF today, and is using endpoints that also support QUIC, QUIC/RTP/SAVPF might be appealing (and might allow the use of QUIC/RTP/SAVPF in multipoint conferencing scenarios where some endpoints use QUIC/RTP/SAVPF, and others use RTP/SAVPF). \r\n\r\nIn other scenarios, the assertion that QUIC/RTP/AVPF and RTP/SAVPF provide roughly equivalent protection, so double encryption with QUIC/RTP/SAVPF isn't adding anything, might be attractive. This is definitely an issue that needs more discussion (and, not necessarily, in the context of this draft!)",
+          "createdAt": "2021-09-20T20:21:02Z",
+          "updatedAt": "2021-09-20T20:21:02Z"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "id": "MDU6SXNzdWU5OTI3MDg4ODA=",
+      "title": "Will we need a QUIC adaptation layer for RTP/RTCP, similar to the one defined for HTTP/3?",
+      "url": "https://github.com/SpencerDawkins/sdp-rtp-quic/issues/2",
+      "state": "OPEN",
+      "author": "SpencerDawkins",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": " * When QUIC establishes connections, it uses IP addresses but then expects applications to use connection IDs to refer to connections, even if the underlying IP addresses change because of NAT binding, and even if the QUIC implementation performs QUIC connection migration itself, so the underlying IP addresses change. RTP applications expect to use IP addresses, not QUIC connection IDs. Must we specify an RTP/RTCP adaptation layer, similar to {{I-D.ietf-quic-http}} for HTTP/3?",
+      "createdAt": "2021-09-09T22:23:54Z",
+      "updatedAt": "2021-09-09T22:23:54Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 3,
+      "id": "MDU6SXNzdWU5OTI3MTk0NjM=",
+      "title": "Do we need to distinguish between mappings onto streams and mappings onto datagrams?",
+      "url": "https://github.com/SpencerDawkins/sdp-rtp-quic/issues/3",
+      "state": "OPEN",
+      "author": "SpencerDawkins",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "From @csperkins (Colin Perkins): \r\n\r\n> Given that there are likely to be several possible mappings, e.g., over streams vs. over datagrams, I wonder whether there should be another layer in the proto to indicate this?  QUIC/DGRAM/RTP/SAVP",
+      "createdAt": "2021-09-09T22:42:42Z",
+      "updatedAt": "2021-09-09T22:50:00Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "SpencerDawkins",
+          "authorAssociation": "OWNER",
+          "body": "@csperkins, I'll ask this question on a mailing list as soon as I figure out which mailing list I should be asking on, but I suspect the answer is going to be \"yes\". \r\n\r\nStealing language from the Berkeley sockets API, I suggest DGRAM (as in Colin's example) and STREAM, as the distinguishing terms, if we need to make this change. ",
+          "createdAt": "2021-09-09T22:44:10Z",
+          "updatedAt": "2021-09-09T22:50:00Z"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "id": "I_kwDOFmYPVc47r7tp",
+      "title": "RTCP-based feedback.",
+      "url": "https://github.com/SpencerDawkins/sdp-rtp-quic/issues/4",
+      "state": "OPEN",
+      "author": "SpencerDawkins",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "From @rjb1000, Richard Bradbury, in private email: \r\n\r\n> **RTCP-based feedback.** This is important for congestion control, but is becoming increasingly relevant to ARQ-based retransmission too. For example, the RIST Simple Profile extends RTP/AVPF's bitmask-based retransmission request (generic NACK, carried in an RTPFB RTCP message) with its own efficient range-based retransmission request (carried in an APP RTCP message). The receiver is then free to use the ARQ message that most efficiently describes the pattern of packet loss it has experienced. (It's probably up to the Video Services Forum to formally register an AVP profile name for this, but I thought it worth mentioning.)",
+      "createdAt": "2021-09-20T20:27:04Z",
+      "updatedAt": "2021-09-20T20:59:19Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "SpencerDawkins",
+          "authorAssociation": "OWNER",
+          "body": "There's definitely an opportunity to rethink what's possible with feedback to RTP senders, whether that's using RTCP roughly unchanged today, mechanisms like the one you mention here, feedback based on QUIC feedback, or some combination of these, and we might not all agree on the same winner. (This is definitely worth more discussion!).",
+          "createdAt": "2021-09-20T20:59:19Z",
+          "updatedAt": "2021-09-20T20:59:19Z"
+        }
+      ]
+    }
+  ],
+  "pulls": []
+}
