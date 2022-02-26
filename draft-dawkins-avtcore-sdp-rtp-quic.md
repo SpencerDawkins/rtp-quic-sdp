@@ -27,11 +27,13 @@ normative:
   RFC3261:
   RFC3264:
   RFC3550:
+  RFC3551:
   RFC3711:
   RFC4585:
   RFC5761:
   RFC5124:
   RFC7667:
+  RFC7850:
   RFC8174:
   RFC8298:
   RFC8825:
@@ -61,7 +63,7 @@ informative:
 
 --- abstract
 
-This document describes these new SDP "proto" attribute values: "QUIC", "QUIC/RTP/SAVP", "QUIC/RTP/AVPF", and "QUIC/RTP/SAVPF", and describes how SDP Offer/Answer can be used to set up an RTP connection using QUIC as a transport protocol.
+This document describes these new SDP "proto" attribute values, "QUIC", "QUIC/RTP/AVP", and "QUIC/RTP/AVPF", and describes how SDP Offer/Answer can be used to set up an RTP connection using QUIC as a transport protocol.
 
 These proto values are necessary to allow the use of QUIC as an underlying transport protocol for applications such as SIP and WebRTC that commonly use SDP as a session signaling protocol to set up RTP connections.
 
@@ -69,7 +71,7 @@ These proto values are necessary to allow the use of QUIC as an underlying trans
 
 # Introduction {#intro}
 
-This document describes these new SDP "proto" attribute values: "QUIC", "QUIC/RTP/SAVP", "QUIC/RTP/AVPF", and "QUIC/RTP/SAVPF", and describes how SDP Offer/Answer ({{RFC3264}}) can be used to set up an RTP ({{RFC3550}}) connection using QUIC ({{RFC9000}} and related specifications) as a transport protocol.
+This document describes these new SDP "proto" attribute values, "QUIC", "QUIC/RTP/AVP", and "QUIC/RTP/AVPF", and describes how SDP Offer/Answer ({{RFC3264}}) can be used to set up an RTP ({{RFC3550}}) connection using QUIC ({{RFC9000}} and related specifications) as a transport protocol.
 
 These proto values are necessary to allow the use of QUIC as an underlying transport protocol for applications such as SIP ({{RFC3261}}) and WebRTC ({{RFC8825}}) that commonly use SDP as a session signaling protocol to set up RTP connections.
 
@@ -101,23 +103,22 @@ Readers are also invited to open issues and send pull requests with contributed 
 
 This document assumes that for RTP-over-QUIC, it is useful to register these AVP profiles using QUIC, in order to allow existing SIP and RTCWEB RTP applications to migrate more easily to QUIC:
 
- * RTP/SAVP ("The Secure Real-time Transport Protocol (SRTP)"), as defined in {{RFC3711}}.
+ * RTP/AVP ("RTP Profile for Audio and Video Conferences with Minimal Control (RTP/AVP)"), as defined in {{RFC3551}}.
  * RTP/AVPF ("Extended RTP Profile for Real-time Transport Control Protocol (RTCP)-Based Feedback (RTP/AVPF)"), as defined in {{RFC4585}}.
- * RTP/SAVPF ("Extended Secure RTP Profile for Real-time Transport Control Protocol (RTCP)-Based Feedback (RTP/SAVPF)"), as defined in {{RFC5124}}.
 
 This document assumes that any implementation adding support for RTP-over-QUIC could reasonably also add support for BUNDLE ({{RFC8843}}) and "rtcp-mux" ({{RFC5761}}), so these capabiilities are not mentioned further in this document.
 
-### An Aside on Secure AVP Profiles in an RTP Over QUIC Context
+## Rationale on the Choice of AVP Profiles in an RTP Over QUIC Context
 
-Existing RTP implementations have the choice for any given RTP connection to exchange either unencrypted RTP streams (using AVP profiles such as RTP/AVPF) or encrypted RTP streams (using AVP profiles such as RTP/SAVPF).
+An RTP implementation that uses QUIC as its underlying transport protocol may choose to rely only on RTCP for feedback. For this reason, the QUIC/RTP/AVPF profile is defined in this specification, to provide the best RTCP feedback possible to RTP senders. 
 
-An RTP implementation that uses QUIC as its underlying transport protocol will always send an RTP stream that is encrypted between the two QUIC endpoints, so some RTP implementations may be tempted to exchange unencrypted RTP as an encrypted QUIC payload, reasoning that QUIC protection will be sufficient.
+An RTP implementation that uses QUIC as its underlying transport protocol may choose to rely information available at the QUIC level for feedback. For this reason, the QUIC/RTP/AVP profile is defined in this specification, to minimize the RTP-level overhead for RTP senders. 
 
-One nuance here is that QUIC is heavily encrypted between two QUIC endpoints, with the very minimal exception of the invariant header fields described in {{RFC8999}}, but as described in {{RFC7667}}, many RTP applications use middleboxes for a variety of reasons, and some of these topologies (for example, media translation) require that the middlebox understand the RTP payload.
+An RTP implementation that uses QUIC as its underlying transport protocol will always send an RTP stream that is encrypted between the two QUIC endpoints. 
 
-These middleboxes are explictly addressed, and the QUIC cryptographic handshake described in {{RFC9001}} takes place between the RTP endpoint and the RTP middlebox. After the QUIC cryptographic handshake has succeeded, the RTP middlebox has access to the RTP in the QUIC payload, and can perform whatever translations are appropriate before forwarding the RTP steam to another RTP endpoint. However, if the RTP sender uses one of the "insecure" AVPs, the middlebox does not have any indication that the RTP sender wants the translated RTP stream to be protected by encryption when the middlebox forwards it. That might be fine if the middlebox and RTP endpoint are both using RTP over QUIC, but if the middlebox is performing transport translation as well, the middlebox may also be translating an RTP-over-QUIC stream to RTP-over-UDP.
+It is undesireable to also use SRTP payload encryption, because this adds double encryption overhead and increases the payload size by adding a second HMAC to the payload. 
 
-This specification tries to provide that indication by supporting both "secure" and "insecure" AVPs for RTP over QUIC, so the middlebox that is providing back-to-back RTP sessions as described in {{RFC7667}} can be aware of the sender's desire that a translated RTP stream is encypted regardless of the underlying transport protocol, without always requiring both SRTP and QUIC encryption between each pair of QUIC endpoints for all RTP traffic. That's one strategy, and it's certainly possible that other strategies might be safer, cleaner, and/or more useful.
+For this reason, the potential QUIC/RTP/SAVP and QUIC/RTP/SAVPF profiles are not defined in this specification. 
 
 ## Open Questions {#open-questions}
 
@@ -158,11 +159,12 @@ The following is an update to the ABNF for an 'm' line, as specified by {{RFC886
    <proto>:                 'QUIC'
    <port>:                  UDP port number
    <fmt>:                   (unchanged from {{RFC8866}})
+
 ~~~~~~
 
-### The QUIC/RTP/SAVP proto {#savp}
+### The QUIC/RTP/AVP proto {#avp}
 
-The following is an update to the ABNF for an 'm' line, as specified by {{RFC8866}}, that defines a new value for the QUIC/RTP/SAVP protocol.
+The following is an update to the ABNF for an 'm' line, as specified by {{RFC8866}}, that defines a new value for the QUIC/RTP/AVP protocol.
 
 ~~~~~~
    media-field =         %s"m" "=" media SP port \["/" integer\]
@@ -171,9 +173,10 @@ The following is an update to the ABNF for an 'm' line, as specified by {{RFC886
    m= line parameter        parameter value(s)
    ------------------------------------------------------------------
    <media>:                 (unchanged from {{RFC8866}})
-   <proto>:                 'QUIC/RTP/SAVP'
+   <proto>:                 'QUIC/RTP/AVP'
    <port>:                  UDP port number
    <fmt>:                   (unchanged from {{RFC8866}})
+
 ~~~~~~
 
 ### The QUIC/RTP/AVPF proto {#avpf}
@@ -190,22 +193,7 @@ The following is an update to the ABNF for an 'm' line, as specified by {{RFC886
    <proto>:                 'QUIC/RTP/AVPF'
    <port>:                  UDP port number
    <fmt>:                   (unchanged from {{RFC8866}})
-~~~~~~
 
-### The QUIC/RTP/SAVPF proto {#savpf}
-
-The following is an update to the ABNF for an 'm' line, as specified by {{RFC8866}}, that defines a new value for the QUIC/RTP/SAVPF protocol.
-
-~~~~~~
-   media-field =         %s"m" "=" media SP port \["/" integer\]
-                             SP proto 1*(SP fmt) CRLF
-
-   m= line parameter        parameter value(s)
-   ------------------------------------------------------------------
-   <media>:                 (unchanged from {{RFC8866}})
-   <proto>:                 'QUIC/RTP/SAVPF'
-   <port>:                  UDP port number
-   <fmt>:                   (unchanged from {{RFC8866}})
 ~~~~~~
 
 ##A QUIC/RTP/AVPF Offer
@@ -241,9 +229,8 @@ This example SDP offer might be included in a SIP Invite.
 This document registers these protocols in the proto registry ({{SDP-parameters}}).
 
 * QUIC ({{quic}})
-* QUIC/RTP/SAVP ({{savp}})
+* QUIC/RTP/AVP ({{avp}})
 * QUIC/RTP/AVPF ({{avpf}})
-* QUIC/RTP/SAVPF ({{savpf}})
 
 ## Proto Registrations
 
@@ -251,9 +238,8 @@ IANA is requested to add these protocols to the Session Description Protocol (SD
 
 | Type | SDP Name | Reference |
 | proto | QUIC | RFCXXXX |
-| proto | QUIC/RTP/SAVP | RFCXXXX |
+| proto | QUIC/RTP/AVP | RFCXXXX |
 | proto | QUIC/RTP/AVPF | RFCXXXX |
-| proto | QUIC/RTP/SAVPF | RFCXXXX |
 
 **Note to the RFC Editor**
 
@@ -276,5 +262,6 @@ My appreciation to the authors of {{RFC4145}}, which served as a model for the i
 Thanks to these folks for helping to improve this draft:
 
 * Colin Perkins
+* Justin Uberi
 
 (Your name also could appear here. Please comment and contribute, as per {{contrib}}).
