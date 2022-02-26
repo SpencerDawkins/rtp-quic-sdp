@@ -33,12 +33,13 @@ normative:
   RFC5761:
   RFC5124:
   RFC7667:
-  RFC7850:
   RFC8174:
   RFC8298:
+  RFC8451:
   RFC8825:
   RFC8843:
   RFC8866:
+  RFC8888:
   RFC8999:
   RFC9000:
   RFC9001:
@@ -63,7 +64,7 @@ informative:
 
 --- abstract
 
-This document describes these new SDP "proto" attribute values, "QUIC", "QUIC/RTP/AVP", and "QUIC/RTP/AVPF", and describes how SDP Offer/Answer can be used to set up an RTP connection using QUIC as a transport protocol.
+This document describes these new SDP "proto" attribute values: "QUIC", "QUIC/RTP/AVP", and "QUIC/RTP/AVPF", and describes how SDP Offer/Answer can be used to set up an RTP connection using QUIC as a transport protocol.
 
 These proto values are necessary to allow the use of QUIC as an underlying transport protocol for applications such as SIP and WebRTC that commonly use SDP as a session signaling protocol to set up RTP connections.
 
@@ -71,7 +72,7 @@ These proto values are necessary to allow the use of QUIC as an underlying trans
 
 # Introduction {#intro}
 
-This document describes these new SDP "proto" attribute values, "QUIC", "QUIC/RTP/AVP", and "QUIC/RTP/AVPF", and describes how SDP Offer/Answer ({{RFC3264}}) can be used to set up an RTP ({{RFC3550}}) connection using QUIC ({{RFC9000}} and related specifications) as a transport protocol.
+This document describes these new SDP "proto" attribute values: "QUIC", "QUIC/RTP/AVP", and "QUIC/RTP/AVPF", and describes how SDP Offer/Answer ({{RFC3264}}) can be used to set up an RTP ({{RFC3550}}) connection using QUIC ({{RFC9000}} and related specifications) as a transport protocol.
 
 These proto values are necessary to allow the use of QUIC as an underlying transport protocol for applications such as SIP ({{RFC3261}}) and WebRTC ({{RFC8825}}) that commonly use SDP as a session signaling protocol to set up RTP connections.
 
@@ -101,24 +102,24 @@ Readers are also invited to open issues and send pull requests with contributed 
 
 ##Assumptions for this document {#assume}
 
-This document assumes that for RTP-over-QUIC, it is useful to register these AVP profiles using QUIC, in order to allow existing SIP and RTCWEB RTP applications to migrate more easily to QUIC:
+This document assumes that any implementation adding support for RTP-over-QUIC could reasonably also add support for BUNDLE ({{RFC8843}}) and "rtcp-mux" ({{RFC5761}}), so these capabiilities are not mentioned further in this document.
+
+## Rationale on the Choice of AVP Profiles in the Context of RTP Encapsulation in QUIC {#rationale}
+
+This document registers these AVP profiles using QUIC:
 
  * RTP/AVP ("RTP Profile for Audio and Video Conferences with Minimal Control (RTP/AVP)"), as defined in {{RFC3551}}.
  * RTP/AVPF ("Extended RTP Profile for Real-time Transport Control Protocol (RTCP)-Based Feedback (RTP/AVPF)"), as defined in {{RFC4585}}.
 
-This document assumes that any implementation adding support for RTP-over-QUIC could reasonably also add support for BUNDLE ({{RFC8843}}) and "rtcp-mux" ({{RFC5761}}), so these capabiilities are not mentioned further in this document.
+ A word of explanation for these choices is in order.
 
-## Rationale on the Choice of AVP Profiles in an RTP Over QUIC Context
+ One view is that support for RTP encapsulation in QUIC with its TLS 1.3 handshake {{RFC9001}} is a drop-in replacement for RTP encapsulation in DTLS/SRTP, with few if any other changes required. A current RTP implementation adding support for QUIC as its underlying transport protocol might rely only on RTCP for feedback to the sender. For this reason, the QUIC/RTP/AVPF profile is defined in this specification, to provide the best RTCP feedback possible to RTP senders.
 
-An RTP implementation that uses QUIC as its underlying transport protocol may choose to rely only on RTCP for feedback. For this reason, the QUIC/RTP/AVPF profile is defined in this specification, to provide the best RTCP feedback possible to RTP senders. 
+Some proposals for RTP encapsulation in QUIC include relying on information available at the QUIC level for feedback. These implementations may not need the full range of capabilities available with {{RFC4585}} plus Extended Reports (XR) (as suggested for WebRTC in {{RFC8451}}and RTCP feedback reports (for example, {{RFC8888}}). For this reason, the QUIC/RTP/AVP profile is defined in this specification, to minimize the RTP-level overhead for RTP senders and receivers.
 
-An RTP implementation that uses QUIC as its underlying transport protocol may choose to rely information available at the QUIC level for feedback. For this reason, the QUIC/RTP/AVP profile is defined in this specification, to minimize the RTP-level overhead for RTP senders. 
+QUIC has "always-on" encryption, with the exception of a few invariant QUIC header fields as described in {{RFC8999}}. An RTP implementation that uses QUIC as its underlying transport protocol will only send and receive an RTP stream that is completely encrypted between two QUIC endpoints.
 
-An RTP implementation that uses QUIC as its underlying transport protocol will always send an RTP stream that is encrypted between the two QUIC endpoints. 
-
-It is undesireable to also use SRTP payload encryption, because this adds double encryption overhead and increases the payload size by adding a second HMAC to the payload. 
-
-For this reason, the potential QUIC/RTP/SAVP and QUIC/RTP/SAVPF profiles are not defined in this specification. 
+It is not considered desirable to use SRTP payload encryption for RTP that will be encapsulated in QUIC, because this adds the computational overhead of double encryption and increases the QUIC payload size by adding a second HMAC to the payload. For this reason, the obviously possible QUIC/RTP/SAVP {{RFC3711}} and QUIC/RTP/SAVPF {{RFC5124}} profiles have not been defined in this specification.
 
 ## Open Questions {#open-questions}
 
@@ -196,7 +197,7 @@ The following is an update to the ABNF for an 'm' line, as specified by {{RFC886
 
 ~~~~~~
 
-##A QUIC/RTP/AVPF Offer
+##A Minimal QUIC/RTP/AVPF Offer
 
 A complete example of an SDP offer using QUIC/RTP/AVPF might look like:
 
@@ -255,13 +256,16 @@ Security considerations for SDP are described in the corresponding section in {{
 
 Security considerations for SDP offer/answer are described in the cooresponding section in {{RFC3264}}.
 
+Although this specification does not add security considerations beyond those described in {{RFC7667}}, it is possibly worth restating that end-to-end QUIC encryption only protects RTP connections between QUIC endpoints. RTP traffic sent using the QUIC/RTP/AVP and QUIC/RTP/AVPF profiles registered in {{iana}} will arrive at middleboxes unencrypted at the RTP level. Even trustworthy middleboxes must make assumptions about whether to use SRTP protection when forwarding this traffic toward addresses that do not support QUIC transport.
+
 # Acknowledgments
 
-My appreciation to the authors of {{RFC4145}}, which served as a model for the initial structure of this document.
+My thanks to the authors of {{RFC4145}}, which served as a model for the initial structure of this document.
 
 Thanks to these folks for helping to improve this draft:
 
 * Colin Perkins
 * Justin Uberi
+* Richard Bradbury
 
 (Your name also could appear here. Please comment and contribute, as per {{contrib}}).
