@@ -1,16 +1,30 @@
 # SDP Offer/Answer for RTP using QUIC as Transport
 
-This repository is used for a draft defining SDP usage for RTP with QUIC as its underlying transport protocol. The draft is draft-dawkins-avtcore-rtp-quic-sdp.
+This is the working area for the individual Internet-Draft, "SDP Offer/Answer for RTP using QUIC as Transport".
 
 * [Editor's Copy](https://SpencerDawkins.github.io/sdp-rtp-quic/#go.draft-dawkins-avtcore-sdp-rtp-quic.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-dawkins-avtcore-sdp-rtp-quic)
 * [Individual Draft](https://datatracker.ietf.org/doc/html/draft-dawkins-avtcore-sdp-rtp-quic)
 * [Compare Editor's Copy to Individual Draft](https://SpencerDawkins.github.io/sdp-rtp-quic/#go.draft-dawkins-avtcore-sdp-rtp-quic.diff)
 
-Issues and pull requests are welcomed here. 
 
-From the Abstract:
+## Contributing
 
-This document describes these new SDP "proto" attribute values: "QUIC", "QUIC/RTP/SAVP", "QUIC/RTP/AVPF", and "QUIC/RTP/SAVPF", and describes how SDP Offer/Answer can be used to set up an RTP connection using QUIC as a transport protocol.
+See the
+[guidelines for contributions](https://github.com/SpencerDawkins/sdp-rtp-quic/blob/main/CONTRIBUTING.md).
 
-These proto values are necessary to allow the use of QUIC as an underlying transport protocol for applications such as SIP and WebRTC that commonly use SDP as a session signaling protocol to set up RTP connections. 
+Contributions can be made by creating pull requests.
+The GitHub interface supports creating pull requests using the Edit (✏) button.
+
+
+## Command Line Usage
+
+Formatted text and HTML versions of the draft can be built using `make`.
+
+```sh
+$ make
+```
+
+Command line usage requires that you have the necessary software installed.  See
+[the instructions](https://github.com/martinthomson/i-d-template/blob/main/doc/SETUP.md).
+
