@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-05-26T00:32:49.615730+00:00",
+  "timestamp": "2024-05-28T00:29:53.079137+00:00",
   "repo": "SpencerDawkins/sdp-rtp-quic",
   "labels": [
     {
@@ -179,6 +179,36 @@
       "mergedBy": "SpencerDawkins",
       "mergeCommit": {
         "oid": "b1b9bab1dc17f9a8be31fe1aba39a59762b2782a"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 12,
+      "id": "PR_kwDOFmYPVc5wrSgB",
+      "title": "Merge pull request #11 from SpencerDawkins/fix-lib",
+      "url": "https://github.com/SpencerDawkins/sdp-rtp-quic/pull/12",
+      "state": "MERGED",
+      "author": "SpencerDawkins",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "SpencerDawkins"
+      ],
+      "labels": [],
+      "body": "Fix lib setup (just because the version in the repo is a couple of years old)",
+      "createdAt": "2024-05-27T15:21:55Z",
+      "updatedAt": "2024-05-27T15:22:15Z",
+      "baseRepository": "SpencerDawkins/sdp-rtp-quic",
+      "baseRefName": "fix-lib",
+      "baseRefOid": "b8408542a3ba774337ba8a9b3d5a5e96614f61b2",
+      "headRepository": "SpencerDawkins/sdp-rtp-quic",
+      "headRefName": "main",
+      "headRefOid": "b1b9bab1dc17f9a8be31fe1aba39a59762b2782a",
+      "closedAt": "2024-05-27T15:22:15Z",
+      "mergedAt": "2024-05-27T15:22:15Z",
+      "mergedBy": "SpencerDawkins",
+      "mergeCommit": {
+        "oid": "bdb961f977deba033d826b34cda63fc42745256b"
       },
       "comments": [],
       "reviews": []
