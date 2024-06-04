@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-06-02T00:33:02.646364+00:00",
+  "timestamp": "2024-06-04T00:30:16.241490+00:00",
   "repo": "SpencerDawkins/sdp-rtp-quic",
   "labels": [
     {
@@ -50,54 +50,6 @@
     }
   ],
   "issues": [
-    {
-      "number": 5,
-      "id": "I_kwDOFmYPVc5CqPOH",
-      "title": "Check QUIC impacts on BUNDLE",
-      "url": "https://github.com/SpencerDawkins/sdp-rtp-quic/issues/5",
-      "state": "OPEN",
-      "author": "SpencerDawkins",
-      "authorAssociation": "OWNER",
-      "assignees": [],
-      "labels": [],
-      "body": "From @cdh4u - Please remember to check whether there are any BUNDLE impacts. Section 9 of BUNDLE contains RTP considerations for BUNDLE, so I suggest to check whether there is anything that needs to be updated/modified for QUIC usage.",
-      "createdAt": "2022-01-30T00:48:23Z",
-      "updatedAt": "2022-01-30T00:48:23Z",
-      "closedAt": null,
-      "comments": []
-    },
-    {
-      "number": 6,
-      "id": "I_kwDOFmYPVc5DChsl",
-      "title": "Consider including a=tls-id in SDP",
-      "url": "https://github.com/SpencerDawkins/sdp-rtp-quic/issues/6",
-      "state": "OPEN",
-      "author": "SpencerDawkins",
-      "authorAssociation": "OWNER",
-      "assignees": [],
-      "labels": [],
-      "body": "From @juberti, on the AVTCORE mailing list: \r\n\r\n> It would probably be a good idea for the SDP to include a=tls-id, defined in https://datatracker.ietf.org/doc/html/rfc8842, to ensure endpoints can tell when the security handshake is being restarted, as discussed in the cited RFC. This would probably obivate the need for a=connection:new as well (which is not typically used in DTLS-SRTP).",
-      "createdAt": "2022-02-05T00:21:13Z",
-      "updatedAt": "2022-02-05T00:21:13Z",
-      "closedAt": null,
-      "comments": []
-    },
-    {
-      "number": 7,
-      "id": "I_kwDOFmYPVc5DCh7Q",
-      "title": "Consider including a=fingerprint mechanism in a p2p SDP example",
-      "url": "https://github.com/SpencerDawkins/sdp-rtp-quic/issues/7",
-      "state": "OPEN",
-      "author": "SpencerDawkins",
-      "authorAssociation": "OWNER",
-      "assignees": [],
-      "labels": [],
-      "body": "From @juberti on AVTCORE mailing list: \r\n\r\n> For c2s use, the SDP you have outlined should work well. For p2p usage, we should include the a=fingerprint mechanism used in https://datatracker.ietf.org/doc/html/rfc5763 to allow validation of self-signed peer certs.",
-      "createdAt": "2022-02-05T00:23:54Z",
-      "updatedAt": "2022-02-05T00:23:54Z",
-      "closedAt": null,
-      "comments": []
-    },
     {
       "number": 10,
       "id": "I_kwDOFmYPVc5GP9lF",
